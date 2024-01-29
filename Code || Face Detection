@@ -1,0 +1,44 @@
+#import open cv library
+import cv2
+#'imgloc' store the path to input Image or input image
+imgloc = '/content/hp.jpg'
+
+#reading the image from location and store in variable 'image' by using 'imread' function
+image = cv2.imread(imgloc)
+
+#print diamension of string array.
+#the array’s values represent the picture’s height, width, and channels.
+image.shape
+(349, 620, 3)
+
+#conversion of color image to gray scale by using 'cv2.cvtColor' function 
+img_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+#print diamension of gray scale image
+img_gray.shape
+(349, 620)
+
+#load pre-train 'Haar Cascade' classifier built into open cv
+face_classifier = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+
+#perform face detection
+#detectMultiScale() is used to identify faces of different sizes in image
+#scale factor scale down the size of image so,large face become easy to detect 
+face = face_classifier.detectMultiScale(img_gray , scaleFactor=1.2, minNeighbors=5, minSize=(40, 40))
+
+  #making bounding box around faces by using  cv2.rectangle function to draw a green rectangle around each face
+for (x, y, w, h) in face:
+    cv2.rectangle(image, (x, y), (x + w, y + h), (0, 256, 0), 2)
+
+#conversion of image from bgr to rgb using OpenCV's cvtColor() function
+img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+import matplotlib.pyplot as plt
+
+# Create a new figure with a size of 20x20 using plt.figure() 
+plt.figure(figsize=(20,20))
+
+#Display an image stored in the variable img_rgb using plt.imshow()
+plt.imshow(img_rgb)
+
+#Remove the axis labels using plt.axis('off')
+plt.axis('off')
